@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instrumentos TFG – Bryan Vega Rondón</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --azul: #1A3A5C;
+    --azul-medio: #2E6DA4;
+    --azul-claro: #D6E8F7;
+    --naranja: #D4702A;
+    --crema: #FAF7F2;
+    --gris-texto: #2C2C2C;
+    --gris-leve: #F0EDE8;
+    --verde-ok: #2E7D32;
+    --borde: #C8D8E8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--crema);
+    color: var(--gris-texto);
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--azul);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 3px solid var(--naranja);
+  }
+  .nav-brand {
+    padding: 14px 24px;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    min-width: 260px;
+  }
+  .nav-brand span { color: var(--naranja); font-size: 0.75rem; display: block; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; margin-top: 2px; }
+  .nav-tabs { display: flex; flex: 1; overflow-x: auto; }
+  .nav-tab {
+    padding: 16px 22px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: 0.01em;
+  }
+  .nav-tab:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .nav-tab.active { color: #fff; border-bottom-color: var(--naranja); background: rgba(255,255,255,0.08); }
+  .nav-tab .tab-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--naranja); display: block; }
+
+  /* MAIN */
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* CABECERA DE INSTRUMENTO */
+  .instrumento-header {
+    background: var(--azul);
+    color: #fff;
+    padding: 32px 36px;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .instrumento-header::after {
+    content: '';
+    position: absolute;
+    right: -20px; top: -20px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .instrumento-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .instrumento-header .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .instrumento-header .meta span { color: var(--naranja); }
+
+  .instrumento-body {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-top: none;
+    border-radius: 0 0 2px 2px;
+    padding: 32px 36px;
+  }
+
+  /* INSTRUCCIONES */
+  .instrucciones {
+    background: var(--azul-claro);
+    border-left: 4px solid var(--azul-medio);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 0.9rem;
+    border-radius: 0 4px 4px 0;
+  }
+  .instrucciones strong { color: var(--azul); display: block; margin-bottom: 4px; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* SECCIÓN DENTRO DEL INSTRUMENTO */
+  .bloque {
+    margin-bottom: 36px;
+  }
+  .bloque-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--azul);
+    border-bottom: 2px solid var(--azul-claro);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  .bloque-titulo .num { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--naranja); display: block; margin-bottom: 4px; }
+
+  /* CAMPO DE FORMULARIO */
+  .campo { margin-bottom: 22px; }
+  .campo label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--azul);
+    margin-bottom: 6px;
+  }
+  .campo label .req { color: var(--naranja); }
+  .campo input[type="text"],
+  .campo input[type="email"],
+  .campo input[type="number"],
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--borde);
+    border-radius: 4px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    background: var(--crema);
+    color: var(--gris-texto);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .campo input:focus, .campo select:focus, .campo textarea:focus {
+    border-color: var(--azul-medio);
+    background: #fff;
+  }
+  .campo textarea { min-height: 90px; resize: vertical; }
+
+  /* LIKERT TABLE */
+  .likert-wrap { overflow-x: auto; }
+  .likert-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  .likert-table th {
+    background: var(--azul);
+    color: #fff;
+    padding: 10px 8px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+  .likert-table th.th-item { text-align: left; padding-left: 16px; min-width: 320px; }
+  .likert-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--gris-leve);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .likert-table td.td-item {
+    text-align: left;
+    padding-left: 16px;
+    font-size: 0.87rem;
+    line-height: 1.5;
+    color: var(--gris-texto);
+  }
+  .likert-table tr:nth-child(even) td { background: var(--crema); }
+  .likert-table tr:hover td { background: var(--azul-claro); }
+
+  input[type="radio"] { accent-color: var(--azul-medio); width: 18px; height: 18px; cursor: pointer; }
+
+  /* ESCALA REFERENCIA */
+  .escala-ref {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .escala-ref span {
+    background: var(--azul);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .escala-ref span em { color: var(--naranja); font-style: normal; margin-right: 4px; }
+
+  /* ITEMS DE ENTREVISTA */
+  .pregunta-entrevista {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--azul-medio);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border-radius: 0 4px 4px 0;
+  }
+  .pregunta-entrevista .pnum {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--naranja);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .pregunta-entrevista p {
+    font-size: 0.92rem;
+    color: var(--gris-texto);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .pregunta-entrevista .subpregs {
+    list-style: none;
+    padding-left: 12px;
+    border-left: 2px solid var(--borde);
+    margin-top: 8px;
+  }
+  .pregunta-entrevista .subpregs li {
+    font-size: 0.83rem;
+    color: #555;
+    padding: 3px 0;
+    font-style: italic;
+  }
+  .pregunta-entrevista .subpregs li::before { content: "→ "; color: var(--azul-medio); font-style: normal; }
+
+  /* ÍTEMS DE PRUEBA */
+  .ejercicio {
+    background: #fff;
+    border: 1px solid var(--borde);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    position: relative;
+  }
+  .ejercicio .etiqueta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: var(--azul-medio);
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .ejercicio .etiqueta.dim2 { background: var(--naranja); }
+  .ejercicio .etiqueta.dim3 { background: var(--verde-ok); }
+  .ejercicio h4 { font-size: 0.92rem; color: var(--azul); margin-bottom: 10px; }
+  .ejercicio .codigo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    background: #1A1A2E;
+    color: #C9D1D9;
+    padding: 16px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    line-height: 1.6;
+    margin: 12px 0;
+    white-space: pre;
+  }
+  .ejercicio .kw { color: #FF7B72; }
+  .ejercicio .str { color: #A5D6FF; }
+  .ejercicio .cm { color: #8B949E; font-style: italic; }
+  .ejercicio .cls { color: #FFA657; }
+  .ejercicio .fn { color: #D2A8FF; }
+  .ejercicio ol { padding-left: 20px; margin-top: 8px; }
+  .ejercicio ol li { font-size: 0.87rem; margin-bottom: 6px; }
+  .ejercicio .pts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--naranja);
+    position: absolute;
+    top: 16px; right: 18px;
+  }
+
+  /* BOTÓN IMPRIMIR */
+  .btn-print {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--azul);
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    margin-top: 32px;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+  .btn-print:hover { background: var(--azul-medio); }
+
+  .nota-pie {
+    font-size: 0.8rem;
+    color: #777;
+    font-style: italic;
+    border-top: 1px solid var(--borde);
+    padding-top: 16px;
+    margin-top: 32px;
+  }
+
+  @media print {
+    nav { display: none; }
+    .section { display: block !important; page-break-before: always; }
+    .section:first-child { page-break-before: avoid; }
+    .btn-print { display: none; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    Instrumentos TFG
+    <span>Bryan Vega Rondón · <span>USM 2026</span></span>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('enc')">
+      <span class="tab-num">Instrumento 1</span>
+      Encuesta Likert — Estudiantes
+    </div>
+    <div class="nav-tab" onclick="showTab('ent')">
+      <span class="tab-num">Instrumento 2</span>
+      Entrevista — Docentes
+    </div>
+    <div class="nav-tab" onclick="showTab('pru')">
+      <span class="tab-num">Instrumento 3</span>
+      Prueba Diagnóstica — Programación
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════════
+     INSTRUMENTO 1 – ENCUESTA LIKERT ESTUDIANTES
+═══════════════════════════════════════════════════════════════ -->
+<div id="enc" class="section active">
+  <div class="instrumento-header">
+    <h1>Encuesta sobre el Uso de Inteligencia Artificial<br>en el Aprendizaje de Programación</h1>
+    <div class="meta">Instrumento 1 · Variable 1 &amp; 3 · Componente cuantitativo · <span>Escala Likert 1–5</span></div>
+  </div>
+  <div class="instrumento-body">
+
+    <div class="instrucciones">
+      <strong>Instrucciones para el/la estudiante</strong>
+      El presente instrumento tiene como objetivo conocer tu experiencia con herramientas de Inteligencia Artificial Generativa en tus cursos de programación. No existen respuestas correctas o incorrectas. Tu participación es voluntaria y anónima. Lee cada enunciado con atención y marca la opción que mejor refleje tu situación real. El tiempo estimado de respuesta es de 15 a 20 minutos.
+    </div>
+
+    <!-- SECCIÓN A: DATOS GENERALES -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">SECCIÓN A</span>Datos generales del participante</div>
+      <div class="campo">
+        <label>Institución <span class="req">*</span></label>
+        <select>
+          <option value="">Seleccione...</option>
+          <option>CTP Roberto Gamboa Valverde</option>
+          <option>Universidad Latina de Costa Rica</option>
+          <option>Otra institución</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="campo">
+          <label>Nivel educativo <span class="req">*</span></label>
+          <select>
+            <option value="">Seleccione...</option>
+            <option>9.° año (CTP)</option>
+            <option>10.° año (CTP)</option>
+            <option>11.° año (CTP)</option>
+            <option>12.° año (CTP)</option>
+            <option>I año universitario</option>
+            <option>II año universitario</option>
+            <option>III año universitario</option>
+            <option>IV año universitario</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Género <span class="req">*</span></label>
+          <select>
+            <option value="">Seleccione...</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+            <option>No binario / otro</option>
+            <option>Prefiero no indicarlo</option>
+          </select>
+        </div>
+      </div>
+      <div class="campo">
+        <label>Curso actual de programación que estás llevando</label>
+        <input type="text" placeholder="Ej. Programación II, BIS04, Programación de Aplicaciones...">
+      </div>
+      <div class="campo">
+        <label>¿Tienes acceso a internet desde tu casa de forma estable? <span class="req">*</span></label>
+        <select>
+          <option value="">Seleccione...</option>
+          <option>Sí, acceso estable todos los días</option>
+          <option>Sí, pero con intermitencias frecuentes</option>
+          <option>Solo mediante datos móviles</option>
+          <option>No tengo acceso regular</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SECCIÓN B: USO DE HERRAMIENTAS -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">SECCIÓN B</span>Herramientas de IA que utilizas en programación</div>
+      <div class="instrucciones" style="font-size:0.83rem;">
+        <strong>Instrucción</strong>
+        Marca todas las herramientas de IA que hayas utilizado al menos una vez en actividades de programación durante el presente ciclo lectivo.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> ChatGPT (OpenAI)
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> Claude (Anthropic)
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> Gemini (Google)
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> GitHub Copilot
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> Bing / Copilot (Microsoft)
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;font-size:0.88rem;cursor:pointer;padding:10px 14px;border:1.5px solid var(--borde);border-radius:4px;background:var(--crema)">
+          <input type="checkbox" style="accent-color:var(--azul-medio);width:16px;height:16px"> Ninguna
+        </label>
+      </div>
+      <div class="campo">
+        <label>Otra herramienta no listada (especifique)</label>
+        <input type="text" placeholder="Nombre de la herramienta...">
+      </div>
+      <div class="campo">
+        <label>¿Con qué frecuencia usas herramientas de IA en actividades de programación? <span class="req">*</span></label>
+        <select>
+          <option value="">Seleccione...</option>
+          <option>Diariamente</option>
+          <option>Varias veces por semana</option>
+          <option>Ocasionalmente (menos de una vez por semana)</option>
+          <option>Nunca o casi nunca</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SECCIÓN C: LIKERT DIAGNÓSTICA -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">SECCIÓN C — Variable 1</span>Uso actual y competencias digitales en programación</div>
+      <div class="instrucciones" style="font-size:0.83rem;">
+        <strong>Instrucción</strong>
+        Lee cada enunciado y marca la opción que mejor describe tu situación real. No hay respuestas correctas ni incorrectas.
+      </div>
+      <div class="escala-ref">
+        <span><em>1</em>Totalmente en desacuerdo</span>
+        <span><em>2</em>En desacuerdo</span>
+        <span><em>3</em>Ni de acuerdo ni en desacuerdo</span>
+        <span><em>4</em>De acuerdo</span>
+        <span><em>5</em>Totalmente de acuerdo</span>
+      </div>
+      <div class="likert-wrap">
+      <table class="likert-table">
+        <thead>
+          <tr>
+            <th class="th-item">Enunciado</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          </tr>
+        </thead>
+        <tbody id="likert-c-body"></tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- SECCIÓN D: LIKERT IA EN PROGRAMACIÓN -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">SECCIÓN D — Variable 1 &amp; 3</span>Percepción del uso pedagógico de la IA generativa</div>
+      <div class="escala-ref">
+        <span><em>1</em>Totalmente en desacuerdo</span>
+        <span><em>2</em>En desacuerdo</span>
+        <span><em>3</em>Ni de acuerdo ni en desacuerdo</span>
+        <span><em>4</em>De acuerdo</span>
+        <span><em>5</em>Totalmente de acuerdo</span>
+      </div>
+      <div class="likert-wrap">
+      <table class="likert-table">
+        <thead>
+          <tr>
+            <th class="th-item">Enunciado</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          </tr>
+        </thead>
+        <tbody id="likert-d-body"></tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- SECCIÓN E: POST INTERVENCIÓN -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">SECCIÓN E — Variable 3 (post-intervención)</span>Impacto percibido en el aprendizaje de arquitectura de software</div>
+      <div class="instrucciones" style="font-size:0.83rem;">
+        <strong>Nota</strong>
+        Esta sección se aplica únicamente después de completada la fase de intervención pedagógica. Si aún no has participado en la intervención, omite esta sección.
+      </div>
+      <div class="escala-ref">
+        <span><em>1</em>Totalmente en desacuerdo</span>
+        <span><em>2</em>En desacuerdo</span>
+        <span><em>3</em>Ni de acuerdo ni en desacuerdo</span>
+        <span><em>4</em>De acuerdo</span>
+        <span><em>5</em>Totalmente de acuerdo</span>
+      </div>
+      <div class="likert-wrap">
+      <table class="likert-table">
+        <thead>
+          <tr>
+            <th class="th-item">Enunciado</th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+          </tr>
+        </thead>
+        <tbody id="likert-e-body"></tbody>
+      </table>
+      </div>
+    </div>
+
+    <p class="nota-pie">Instrumento elaborado por Bryan Vega Rondón (2026) para el Trabajo Final de Graduación de la Licenciatura en Docencia, Universidad San Marcos. Validado por juicio de expertos conforme a Pérez, Pérez y Seca (2020) y Ulate y Vargas (2016).</p>
+    <button class="btn-print" onclick="window.print()">⎙ Imprimir / Exportar PDF</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INSTRUMENTO 2 – GUÍA DE ENTREVISTA DOCENTES
+═══════════════════════════════════════════════════════════════ -->
+<div id="ent" class="section">
+  <div class="instrumento-header">
+    <h1>Guía de Entrevista Semiestructurada<br>para Docentes de Informática</h1>
+    <div class="meta">Instrumento 2 · Variable 2 · Componente cualitativo · <span>Semiestructurada — aprox. 45 min</span></div>
+  </div>
+  <div class="instrumento-body">
+
+    <div class="instrucciones">
+      <strong>Instrucciones para el/la entrevistador/a</strong>
+      Esta guía contiene preguntas eje organizadas por categorías temáticas, junto con subpreguntas de profundización. No es obligatorio seguir el orden exacto; el objetivo es generar una conversación natural. Solicite consentimiento informado antes de iniciar. Grabe el audio con autorización del/la participante. Las preguntas en cursiva son sondas opcionales para ampliar la respuesta.
+    </div>
+
+    <!-- DATOS -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">DATOS DEL/LA ENTREVISTADO/A</span>Registro previo a la entrevista</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="campo"><label>Código de participante (asignado)</label><input type="text" placeholder="D-01, D-02..."></div>
+        <div class="campo"><label>Fecha y hora</label><input type="text" placeholder="dd/mm/aaaa — HH:MM"></div>
+        <div class="campo"><label>Institución</label>
+          <select><option value="">Seleccione...</option><option>CTP Roberto Gamboa Valverde</option><option>Universidad Latina de Costa Rica</option></select>
+        </div>
+        <div class="campo"><label>Modalidad</label>
+          <select><option value="">Seleccione...</option><option>Presencial</option><option>Videollamada (Teams / Meet / Zoom)</option></select>
+        </div>
+        <div class="campo"><label>Años de experiencia docente en informática</label>
+          <select><option value="">Seleccione...</option><option>Menos de 3 años</option><option>3 a 7 años</option><option>8 a 15 años</option><option>Más de 15 años</option></select>
+        </div>
+        <div class="campo"><label>Cursos que imparte actualmente</label><input type="text" placeholder="Ej. Programación II, Redes I..."></div>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 1 -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">CATEGORÍA 1</span>Diagnóstico sobre las dificultades de aprendizaje de los estudiantes</div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 1.1</div>
+        <p>Desde su experiencia docente, ¿cuáles son las principales dificultades que observa en sus estudiantes al aprender programación orientada a objetos?</p>
+        <ul class="subpregs">
+          <li>¿En qué momento del proceso nota que los estudiantes se "traban" o bloquean con mayor frecuencia?</li>
+          <li>¿Hay alguna diferencia entre cómo aprenden la sintaxis y cómo comprenden el diseño de un programa más complejo?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 1.2</div>
+        <p>¿Ha observado que sus estudiantes tienen dificultad específica para diseñar programas con arquitectura por capas (separar presentación, lógica de negocio y acceso a datos)?</p>
+        <ul class="subpregs">
+          <li>¿Cómo se manifiesta esa dificultad concretamente en el código que entregan?</li>
+          <li>¿A partir de qué nivel o curso considera que ese problema se hace más evidente?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 1.3</div>
+        <p>¿Qué estrategias pedagógicas ha utilizado hasta ahora para ayudar a los estudiantes a superar la brecha entre entender la sintaxis y poder diseñar sistemas completos?</p>
+        <ul class="subpregs">
+          <li>¿Qué ha funcionado mejor? ¿Qué no ha dado los resultados esperados?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 2 -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">CATEGORÍA 2</span>Uso actual de IA generativa por parte del estudiantado</div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 2.1</div>
+        <p>¿Ha observado que sus estudiantes utilizan herramientas de IA generativa (ChatGPT, Claude, Gemini u otras) en sus tareas o proyectos de programación?</p>
+        <ul class="subpregs">
+          <li>¿Con qué frecuencia y para qué tipo de actividades las usan principalmente?</li>
+          <li>¿Lo hacen de forma abierta o lo notan de manera indirecta en las entregas?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 2.2</div>
+        <p>¿Qué problemas o situaciones problemáticas ha identificado a partir de ese uso de IA por parte de los estudiantes?</p>
+        <ul class="subpregs">
+          <li>¿Ha tenido casos de deshonestidad académica relacionados con el uso de IA?</li>
+          <li>¿Nota diferencia entre estudiantes que la usan y los que no en términos de comprensión real del contenido?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 2.3</div>
+        <p>Actualmente, ¿existe alguna normativa institucional o lineamiento docente sobre el uso de IA en sus clases?</p>
+        <ul class="subpregs">
+          <li>¿Lo permite, lo prohíbe o lo deja al criterio del estudiante?</li>
+          <li>¿Ha modificado su forma de evaluar en respuesta al uso de IA por los estudiantes?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 3 -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">CATEGORÍA 3</span>Percepción del potencial pedagógico de la IA generativa</div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 3.1</div>
+        <p>¿Considera que la IA generativa podría tener un uso pedagógico válido en la enseñanza de programación? ¿Por qué sí o por qué no?</p>
+        <ul class="subpregs">
+          <li>¿En qué tipo de actividades específicas la imagina más útil?</li>
+          <li>¿La ve más como una herramienta para el estudiante, para el docente, o para ambos?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 3.2</div>
+        <p>Si existiera una guía pedagógica que le indicara cómo estructurar el uso de IA en sus clases de programación —con tipos de prompts sugeridos para cada actividad—, ¿estaría dispuesto/a a adoptarla?</p>
+        <ul class="subpregs">
+          <li>¿Qué condiciones deberían cumplirse para que usted la incorporara en su práctica docente?</li>
+          <li>¿Qué le generaría más resistencia?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 3.3</div>
+        <p>¿Qué diferencia observa entre un estudiante que pide a la IA que le genere el código y uno que le pide que le explique el razonamiento detrás de una decisión de diseño?</p>
+        <ul class="subpregs">
+          <li>¿Ha visto estudiantes que usen la IA de esa segunda manera de forma espontánea?</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 4 -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">CATEGORÍA 4</span>Contexto institucional y condiciones de acceso</div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 4.1</div>
+        <p>¿Sus estudiantes tienen acceso equitativo a dispositivos y conexión a internet dentro y fuera del aula?</p>
+        <ul class="subpregs">
+          <li>¿Identifica diferencias significativas entre estudiantes según su zona de residencia o condición socioeconómica?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta eje 4.2</div>
+        <p>¿Conoce la Estrategia Nacional de IA del MEP 2026 o alguna directriz similar de su institución sobre el uso de IA en educación?</p>
+        <ul class="subpregs">
+          <li>¿Ha recibido alguna capacitación o apoyo institucional para incorporar estas herramientas en su práctica docente?</li>
+        </ul>
+      </div>
+
+      <div class="pregunta-entrevista">
+        <div class="pnum">Pregunta cierre</div>
+        <p>¿Hay algo más sobre el tema —la enseñanza de programación con IA— que considere importante mencionar y que no haya sido abordado en esta conversación?</p>
+      </div>
+    </div>
+
+    <p class="nota-pie">Guía elaborada por Bryan Vega Rondón (2026). Instrumento cualitativo correspondiente a la Variable 2 (Estrategias pedagógicas mediadas por IA). Diseñado conforme a Hernández, Fernández y Baptista (2014) y Ulate y Vargas (2016). Las entrevistas serán grabadas con consentimiento informado y transcritas para análisis temático.</p>
+    <button class="btn-print" onclick="window.print()">⎙ Imprimir / Exportar PDF</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INSTRUMENTO 3 – PRUEBA DIAGNÓSTICA DE COMPETENCIAS
+═══════════════════════════════════════════════════════════════ -->
+<div id="pru" class="section">
+  <div class="instrumento-header">
+    <h1>Prueba Diagnóstica de Competencias<br>en Programación Orientada a Objetos</h1>
+    <div class="meta">Instrumento 3 · Variable 1 &amp; 3 · Componente cuantitativo · <span>60 minutos · 100 puntos</span></div>
+  </div>
+  <div class="instrumento-body">
+
+    <div class="instrucciones">
+      <strong>Instrucciones generales</strong>
+      Esta prueba evalúa tres dimensiones de competencia en programación: (A) manejo de sintaxis básica, (B) capacidad de depuración autónoma, y (C) comprensión de arquitectura de software por capas. Responde de forma individual y sin consultar herramientas de IA. Puedes usar papel para borradores. Tiempo: 60 minutos. Puntaje total: 100 puntos. Aplica tanto como prueba pre-intervención (diagnóstico) como post-intervención (evaluación de impacto).
+    </div>
+
+    <!-- DIMENSIÓN A -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">DIMENSIÓN A · 30 puntos</span>Manejo de sintaxis básica en programación orientada a objetos</div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta">A1 · Sintaxis</div>
+        <h4>Definición de clase con atributos y constructor</h4>
+        <p style="font-size:0.87rem;margin-bottom:10px">Escribe en Java (o en el lenguaje que te indique tu docente) una clase llamada <strong>Producto</strong> que tenga los siguientes atributos: <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">id</code> (entero), <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">nombre</code> (String) y <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">precio</code> (double). Incluye: constructor con todos los parámetros, métodos getters para cada atributo, y un método <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">toString()</code> que retorne la información del producto.</p>
+        <div class="campo"><label>Código de respuesta:</label><textarea placeholder="public class Producto {&#10;    // Tu código aquí&#10;}"></textarea></div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta">A2 · Sintaxis</div>
+        <h4>Herencia y polimorfismo</h4>
+        <p style="font-size:0.87rem;margin-bottom:10px">A partir de la clase <strong>Producto</strong> del ejercicio anterior, crea una subclase llamada <strong>ProductoDigital</strong> que agregue el atributo <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">urlDescarga</code> (String). Sobreescribe el método <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">toString()</code> para incluir ese nuevo atributo.</p>
+        <div class="campo"><label>Código de respuesta:</label><textarea placeholder="public class ProductoDigital extends Producto {&#10;    // Tu código aquí&#10;}"></textarea></div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta">A3 · Sintaxis</div>
+        <h4>Uso de colecciones y ciclos</h4>
+        <p style="font-size:0.87rem;margin-bottom:10px">Escribe un fragmento de código que: (1) cree un <code style="font-family:JetBrains Mono,monospace;background:#eee;padding:2px 5px;border-radius:3px">ArrayList&lt;Producto&gt;</code>, (2) agregue tres productos con datos ficticios, y (3) recorra la lista imprimiendo el nombre y precio de cada uno.</p>
+        <div class="campo"><label>Código de respuesta:</label><textarea placeholder="// Tu código aquí"></textarea></div>
+      </div>
+    </div>
+
+    <!-- DIMENSIÓN B -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">DIMENSIÓN B · 30 puntos</span>Capacidad de depuración autónoma</div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta dim2">B1 · Depuración</div>
+        <h4>Identificación de errores de compilación</h4>
+        <p style="font-size:0.87rem;margin-bottom:6px">El siguiente código contiene <strong>3 errores de sintaxis</strong> que impiden su compilación. Identifícalos, explica por qué es un error y escribe la corrección correspondiente.</p>
+        <div class="codigo"><span class="kw">public class</span> <span class="cls">Calculadora</span> {
+    <span class="kw">private int</span> resultado
+
+    <span class="kw">public</span> <span class="cls">Calculadora</span>() {
+        resultado = <span class="str">0</span>;
+    }
+
+    <span class="kw">public void</span> <span class="fn">sumar</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+        resultado = a + b
+    }
+
+    <span class="kw">public int</span> <span class="fn">getResultado</span>(<span class="kw">int</span> x) {
+        <span class="kw">return</span> resultado;
+    }
+}</div>
+        <div class="campo"><label>Error 1 — Línea, descripción y corrección:</label><textarea placeholder="Línea: ___  Error: ___  Corrección: ___"></textarea></div>
+        <div class="campo"><label>Error 2 — Línea, descripción y corrección:</label><textarea placeholder="Línea: ___  Error: ___  Corrección: ___"></textarea></div>
+        <div class="campo"><label>Error 3 — Línea, descripción y corrección:</label><textarea placeholder="Línea: ___  Error: ___  Corrección: ___"></textarea></div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta dim2">B2 · Depuración</div>
+        <h4>Identificación de errores lógicos en tiempo de ejecución</h4>
+        <p style="font-size:0.87rem;margin-bottom:6px">El siguiente método compila sin errores, pero produce un resultado incorrecto. Describe qué resultado produce, cuál debería ser el resultado correcto, y cuál es la causa del error lógico.</p>
+        <div class="codigo"><span class="kw">public int</span> <span class="fn">calcularPromedio</span>(<span class="kw">int</span>[] numeros) {
+    <span class="kw">int</span> suma = <span class="str">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="str">0</span>; i &lt; numeros.length; i++) {
+        suma = numeros[i]; <span class="cm">// ← observa esta línea</span>
+    }
+    <span class="kw">return</span> suma / numeros.length;
+}</div>
+        <div class="campo"><label>¿Qué resultado produce el código tal como está?</label><textarea placeholder="Explica con tus propias palabras..."></textarea></div>
+        <div class="campo"><label>¿Cuál debería ser el resultado correcto y cómo se corrige?</label><textarea placeholder="Corrección propuesta:"></textarea></div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta dim2">B3 · Depuración</div>
+        <h4>Lectura e interpretación de un stack trace</h4>
+        <p style="font-size:0.87rem;margin-bottom:6px">Lee el siguiente mensaje de error de Java y responde las preguntas.</p>
+        <div class="codigo"><span class="cm">Exception in thread "main" java.lang.NullPointerException</span>
+    at <span class="cls">ServicioCliente</span>.<span class="fn">buscarPorId</span>(<span class="cls">ServicioCliente</span>.java:<span class="str">34</span>)
+    at <span class="cls">Main</span>.<span class="fn">main</span>(<span class="cls">Main</span>.java:<span class="str">12</span>)</div>
+        <ol>
+          <li class="campo" style="list-style:none;margin-bottom:0">
+            <label>¿En qué archivo y línea ocurre el error?</label>
+            <input type="text" placeholder="Tu respuesta...">
+          </li>
+          <li class="campo" style="list-style:none;margin-bottom:0">
+            <label>¿Qué significa un <em>NullPointerException</em> en Java?</label>
+            <input type="text" placeholder="Tu respuesta...">
+          </li>
+          <li class="campo" style="list-style:none;margin-bottom:0">
+            <label>¿Cuáles serían las primeras dos acciones que tomarías para diagnosticar la causa?</label>
+            <textarea placeholder="Acción 1:&#10;Acción 2:"></textarea>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- DIMENSIÓN C -->
+    <div class="bloque">
+      <div class="bloque-titulo"><span class="num">DIMENSIÓN C · 40 puntos</span>Comprensión de arquitectura de software por capas</div>
+
+      <div class="ejercicio">
+        <div class="pts">10 pts</div>
+        <div class="etiqueta dim3">C1 · Arquitectura</div>
+        <h4>Identificación de capas en un sistema existente</h4>
+        <p style="font-size:0.87rem;margin-bottom:10px">Lee los nombres y responsabilidades de las siguientes clases e indica a qué capa arquitectónica pertenece cada una: <strong>Presentación (UI)</strong>, <strong>Lógica de Negocio (BLL)</strong> o <strong>Acceso a Datos (DAL/DAO)</strong>.</p>
+        <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.84rem">
+          <thead><tr style="background:var(--azul);color:#fff">
+            <th style="padding:8px 12px;text-align:left">Clase y descripción</th>
+            <th style="padding:8px;text-align:center;width:120px">Capa</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--borde)"><td style="padding:10px 12px"><code style="font-family:JetBrains Mono,monospace">ClienteDAO</code> — conecta a la base de datos y ejecuta consultas SQL para gestionar clientes</td><td><input type="text" style="width:100%;border:1px solid var(--borde);padding:6px;text-align:center;font-size:0.83rem;background:var(--crema)" placeholder="Capa..."></td></tr>
+            <tr style="background:var(--crema);border-bottom:1px solid var(--borde)"><td style="padding:10px 12px"><code style="font-family:JetBrains Mono,monospace">FormularioRegistro</code> — muestra campos de texto al usuario y captura sus datos de entrada</td><td><input type="text" style="width:100%;border:1px solid var(--borde);padding:6px;text-align:center;font-size:0.83rem;background:#fff" placeholder="Capa..."></td></tr>
+            <tr style="border-bottom:1px solid var(--borde)"><td style="padding:10px 12px"><code style="font-family:JetBrains Mono,monospace">ServicioFactura</code> — calcula impuestos, aplica descuentos y valida los datos de una factura</td><td><input type="text" style="width:100%;border:1px solid var(--borde);padding:6px;text-align:center;font-size:0.83rem;background:var(--crema)" placeholder="Capa..."></td></tr>
+            <tr style="background:var(--crema);border-bottom:1px solid var(--borde)"><td style="padding:10px 12px"><code style="font-family:JetBrains Mono,monospace">PanelPrincipal</code> — menú de navegación que redirige al usuario entre módulos del sistema</td><td><input type="text" style="width:100%;border:1px solid var(--borde);padding:6px;text-align:center;font-size:0.83rem;background:#fff" placeholder="Capa..."></td></tr>
+            <tr><td style="padding:10px 12px"><code style="font-family:JetBrains Mono,monospace">ProductoRepository</code> — realiza operaciones CRUD sobre la tabla Productos en MySQL</td><td><input type="text" style="width:100%;border:1px solid var(--borde);padding:6px;text-align:center;font-size:0.83rem;background:var(--crema)" placeholder="Capa..."></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">15 pts</div>
+        <div class="etiqueta dim3">C2 · Arquitectura</div>
+        <h4>Análisis de violaciones a la separación de capas</h4>
+        <p style="font-size:0.87rem;margin-bottom:6px">El siguiente fragmento de código viola el principio de separación de responsabilidades por capas. Identifica al menos <strong>dos violaciones</strong>, explica por qué son un problema de diseño y propone cómo corregirlas.</p>
+        <div class="codigo"><span class="kw">public class</span> <span class="cls">FormularioPedido</span> {   <span class="cm">// clase de la capa UI</span>
+
+    <span class="kw">public void</span> <span class="fn">guardarPedido</span>(<span class="kw">String</span> producto, <span class="kw">int</span> cantidad) {
+        <span class="cm">// Validación de negocio directamente en la UI</span>
+        <span class="kw">if</span> (cantidad &lt;= <span class="str">0</span>) {
+            System.out.println(<span class="str">"Cantidad inválida"</span>);
+            <span class="kw">return</span>;
+        }
+        <span class="cm">// Conexión a BD directamente desde la UI</span>
+        Connection conn = DriverManager.<span class="fn">getConnection</span>(
+            <span class="str">"jdbc:mysql://localhost/tienda"</span>, <span class="str">"root"</span>, <span class="str">"1234"</span>);
+        PreparedStatement ps = conn.<span class="fn">prepareStatement</span>(
+            <span class="str">"INSERT INTO pedidos VALUES (?,?)"</span>);
+        ps.<span class="fn">setString</span>(<span class="str">1</span>, producto);
+        ps.<span class="fn">setInt</span>(<span class="str">2</span>, cantidad);
+        ps.<span class="fn">executeUpdate</span>();
+    }
+}</div>
+        <div class="campo"><label>Violación 1 — descripción y corrección propuesta:</label><textarea placeholder="Qué viola: ___&#10;Por qué es un problema: ___&#10;Cómo se corrige: ___"></textarea></div>
+        <div class="campo"><label>Violación 2 — descripción y corrección propuesta:</label><textarea placeholder="Qué viola: ___&#10;Por qué es un problema: ___&#10;Cómo se corrige: ___"></textarea></div>
+      </div>
+
+      <div class="ejercicio">
+        <div class="pts">15 pts</div>
+        <div class="etiqueta dim3">C3 · Arquitectura</div>
+        <h4>Diseño de un sistema simple con arquitectura por capas</h4>
+        <p style="font-size:0.87rem;margin-bottom:10px">Se te pide diseñar la estructura de clases para un sistema sencillo de <strong>registro de estudiantes</strong>. El sistema debe permitir: guardar un nuevo estudiante, buscar un estudiante por cédula, y mostrar la lista de estudiantes registrados.</p>
+        <div class="campo">
+          <label>1. Lista las clases que crearías, indicando el nombre de cada clase y la capa a la que pertenece:</label>
+          <textarea placeholder="Ejemplo de formato:&#10;Clase: EstudianteDAO — Capa: Acceso a Datos — Responsabilidad: ...&#10;Clase: _______________"></textarea>
+        </div>
+        <div class="campo">
+          <label>2. Describe el flujo que seguiría el sistema cuando el usuario presiona el botón "Guardar nuevo estudiante". ¿Qué sucede en cada capa?</label>
+          <textarea placeholder="1. En la capa de Presentación: ...&#10;2. En la capa de Lógica de Negocio: ...&#10;3. En la capa de Acceso a Datos: ..."></textarea>
+        </div>
+        <div class="campo">
+          <label>3. ¿Por qué es importante que la capa de presentación NO se comunique directamente con la capa de acceso a datos? Explica con tus propias palabras.</label>
+          <textarea placeholder="Tu explicación..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <p class="nota-pie">Prueba diseñada por Bryan Vega Rondón (2026) conforme a la Variable 1 (Competencias digitales en programación) y Variable 3 (Impacto en rendimiento). Aplicable como diagnóstico pre-intervención y como medición post-intervención. Instrumento validado por juicio de expertos. La rúbrica de corrección se entrega en documento separado al evaluador.</p>
+    <button class="btn-print" onclick="window.print()">⎙ Imprimir / Exportar PDF</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ─── DATOS LIKERT ────────────────────────────────────────────────────────────
+const iteC = [
+  "Entiendo la diferencia entre una variable, un método y una clase.",
+  "Soy capaz de escribir un programa en Java (u otro lenguaje OO) sin ayuda.",
+  "Cuando mi código produce un error, sé cómo interpretar el mensaje para encontrar la causa.",
+  "Puedo depurar un error en mi código de forma autónoma sin pedir ayuda al docente ni a la IA.",
+  "Comprendo qué significa que un sistema tenga 'separación de responsabilidades por capas'.",
+  "Sería capaz de diseñar un sistema completo con capa de presentación, lógica de negocio y acceso a datos sin orientación externa.",
+];
+const iteD = [
+  "Utilizo herramientas de IA para resolver dudas sobre la sintaxis de mi lenguaje de programación.",
+  "Cuando la IA me genera código, comprendo completamente por qué está escrito de esa manera.",
+  "Utilizo la IA para ayudarme a identificar y corregir errores en mis programas.",
+  "Uso herramientas de IA para programar sin que mi docente me haya dado orientación sobre cómo hacerlo.",
+  "El uso de IA me ha ayudado a aprender mejor programación, no solo a terminar las tareas más rápido.",
+  "Me gustaría que el docente me enseñara explícitamente cómo hacer preguntas efectivas a la IA para entender mejor la arquitectura de un programa.",
+  "Cuando la IA me da una solución de código, la evalúo críticamente antes de aceptarla.",
+  "El uso de IA en clase debería estar acompañado de guías claras del docente sobre cuándo y cómo usarla.",
+];
+const iteE = [
+  "Tras participar en las actividades con guías de prompts, comprendo mejor la diferencia entre las capas de un sistema de software.",
+  "El uso guiado de la IA me ayudó a entender el propósito arquitectónico del código, no solo su sintaxis.",
+  "Ahora soy más capaz de depurar errores de arquitectura de forma autónoma que antes de la intervención.",
+  "Cambié la forma en que le hago preguntas a la IA: ahora pido explicaciones de razonamiento en lugar de código directo.",
+  "Las actividades de ingeniería de prompts me ayudaron a pensar de manera más estructurada sobre el diseño de software.",
+  "Recomendaría el uso de guías de prompts pedagógicos en otros cursos de programación.",
+];
+
+function buildLikert(bodyId, items) {
+  const tbody = document.getElementById(bodyId);
+  items.forEach((txt, i) => {
+    const tr = document.createElement('tr');
+    let cells = `<td class="td-item">${txt}</td>`;
+    for (let v = 1; v <= 5; v++) {
+      cells += `<td><input type="radio" name="${bodyId}_q${i}" value="${v}"></td>`;
+    }
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+}
+
+buildLikert('likert-c-body', iteC);
+buildLikert('likert-d-body', iteD);
+buildLikert('likert-e-body', iteE);
+
+// ─── NAVEGACIÓN ──────────────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const map = { enc: 0, ent: 1, pru: 2 };
+  tabs[map[id]].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
