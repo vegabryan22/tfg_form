@@ -143,7 +143,7 @@
     </a>
     <a class="nav-tab {{ request()->routeIs('entrevista.*') ? 'active' : '' }}" href="{{ route('entrevista.show') }}">
       <span class="tab-num">Instrumento 2</span>
-      Entrevista — Docentes
+      Cuestionario — Docentes
     </a>
     <a class="nav-tab {{ request()->routeIs('prueba.*') ? 'active' : '' }}" href="{{ route('prueba.show') }}">
       <span class="tab-num">Instrumento 3</span>
