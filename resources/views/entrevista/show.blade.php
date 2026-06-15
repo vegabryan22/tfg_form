@@ -31,13 +31,6 @@
       <div class="bloque-titulo"><span class="num">SECCIÓN A</span>Datos del participante</div>
       <div class="grid-2">
         <div class="campo">
-          <label>Código de participante <span class="req">*</span>
-            <span style="font-weight:400;color:#777;font-size:0.78rem;font-family:'JetBrains Mono',monospace"> — asignado por el investigador</span>
-          </label>
-          <input type="text" name="codigo_participante" value="{{ old('codigo_participante') }}" placeholder="D-01, D-02..." required>
-          @error('codigo_participante')<span class="error-msg">{{ $message }}</span>@enderror
-        </div>
-        <div class="campo">
           <label>Fecha de hoy <span class="req">*</span></label>
           <input type="text" name="fecha_hora" value="{{ old('fecha_hora', now()->format('d/m/Y')) }}" placeholder="dd/mm/aaaa" required>
           @error('fecha_hora')<span class="error-msg">{{ $message }}</span>@enderror

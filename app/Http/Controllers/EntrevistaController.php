@@ -15,10 +15,9 @@ class EntrevistaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'codigo_participante' => 'required|string|max:20',
             'fecha_hora'          => 'required|string|max:50',
             'institucion'         => 'required|string|max:200',
-            'modalidad'           => 'required|string|max:50',
+            'modalidad'           => 'nullable|string|max:50',
             'years_experiencia'   => 'required|string|max:50',
             'cursos_actuales'     => 'nullable|string|max:300',
             'resp_cat1_p1'  => 'nullable|string',
@@ -35,6 +34,8 @@ class EntrevistaController extends Controller
             'resp_cierre'   => 'nullable|string',
             'observaciones' => 'nullable|string',
         ], ['required' => 'Este campo es obligatorio.']);
+
+        $data['codigo_participante'] = 'D-' . str_pad(Entrevista::count() + 1, 2, '0', STR_PAD_LEFT);
 
         Entrevista::create($data);
 
