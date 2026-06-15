@@ -13,8 +13,4 @@ return [
     'key' => env('APP_KEY'),
     'previous_keys' => [],
     'maintenance' => ['driver' => 'file'],
-    'providers' => Illuminate\Support\AggregateServiceProvider::defaultProviders()->merge([
-        App\Providers\AppServiceProvider::class,
-    ])->toArray(),
-    'aliases' => Illuminate\Support\Facades\Facade::defaultAliases()->merge([])->toArray(),
 ];
