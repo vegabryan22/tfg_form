@@ -157,5 +157,126 @@
 </main>
 
 @stack('scripts')
+<script>
+// ── Guardado automático de progreso en localStorage ──────────────────────────
+(function () {
+  const form = document.querySelector('main form');
+  if (!form) return;
+
+  const KEY = 'tfg_draft_' + location.pathname;
+
+  // Toast flotante breve
+  function toast(msg, bg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    Object.assign(el.style, {
+      position:'fixed', bottom:'20px', right:'20px', background: bg,
+      color:'#fff', padding:'8px 18px', borderRadius:'4px',
+      fontSize:'0.78rem', fontFamily:'"JetBrains Mono",monospace',
+      zIndex:'9999', opacity:'0', transition:'opacity 0.3s', pointerEvents:'none'
+    });
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.style.opacity = '1');
+    setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 350); }, 2200);
+  }
+
+  // Serializar el formulario completo
+  function serialize() {
+    const data = {};
+    form.querySelectorAll('input, select, textarea').forEach(el => {
+      if (!el.name || el.type === 'hidden' || el.name === '_token') return;
+      if (el.type === 'checkbox') {
+        if (!Array.isArray(data[el.name])) data[el.name] = [];
+        if (el.checked) data[el.name].push(el.value);
+      } else if (el.type === 'radio') {
+        if (el.checked) data[el.name] = el.value;
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+    data.__at = new Date().toISOString();
+    return data;
+  }
+
+  // Guardar en localStorage
+  function guardar() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(serialize()));
+      toast('✓ Progreso guardado', '#2E7D32');
+    } catch (e) {}
+  }
+
+  // Restaurar desde localStorage
+  function restaurar() {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      form.querySelectorAll('input, select, textarea').forEach(el => {
+        if (!el.name || el.type === 'hidden' || el.name === '_token') return;
+        const val = data[el.name];
+        if (val === undefined) return;
+        if (el.type === 'checkbox') {
+          el.checked = Array.isArray(val) && val.includes(el.value);
+        } else if (el.type === 'radio') {
+          el.checked = (val === el.value);
+        } else {
+          el.value = val;
+        }
+      });
+      mostrarBanner(data.__at);
+    } catch (e) {}
+  }
+
+  // Banner de borrador restaurado
+  function mostrarBanner(savedAt) {
+    const hora = savedAt
+      ? new Date(savedAt).toLocaleTimeString('es-CR', { hour:'2-digit', minute:'2-digit' })
+      : '';
+    const banner = document.createElement('div');
+    banner.id = 'tfg-draft-banner';
+    banner.innerHTML =
+      '<span style="flex:1">📋 Se restauró un borrador guardado' +
+      (hora ? ' a las ' + hora : '') +
+      '. Puede continuar desde donde lo dejó.</span>' +
+      '<button type="button" onclick="tfgDescartarBorrador()" ' +
+      'style="background:none;border:1px solid rgba(255,255,255,0.5);color:#fff;' +
+      'padding:4px 14px;border-radius:3px;cursor:pointer;font-size:0.78rem;' +
+      'font-family:\'JetBrains Mono\',monospace;white-space:nowrap;flex-shrink:0">' +
+      'Descartar borrador</button>';
+    Object.assign(banner.style, {
+      display:'flex', alignItems:'center', gap:'16px',
+      background:'#1A3A5C', color:'#fff', padding:'12px 24px',
+      fontSize:'0.84rem', fontFamily:'"Source Serif 4",serif',
+      borderBottom:'2px solid #D4702A', flexWrap:'wrap'
+    });
+    // Insertar antes del instrumento-header dentro de main
+    const target = document.querySelector('main .instrumento-header') || form;
+    target.insertAdjacentElement('beforebegin', banner);
+  }
+
+  window.tfgDescartarBorrador = function () {
+    localStorage.removeItem(KEY);
+    const b = document.getElementById('tfg-draft-banner');
+    if (b) b.remove();
+    toast('Borrador descartado', '#D4702A');
+  };
+
+  // Limpiar al enviar exitosamente
+  form.addEventListener('submit', () => localStorage.removeItem(KEY));
+
+  // Auto-guardar mientras escribe (debounce 1.5s)
+  let timer;
+  const onInput = () => { clearTimeout(timer); timer = setTimeout(guardar, 1500); };
+  form.addEventListener('input', onInput);
+  form.addEventListener('change', onInput);
+
+  // Keepalive: ping cada 4 min para que la sesión no expire
+  setInterval(() => fetch('/keepalive', { credentials:'same-origin' }).catch(() => {}), 4 * 60 * 1000);
+
+  // Restaurar al cargar
+  restaurar();
+})();
+</script>
 </body>
 </html>

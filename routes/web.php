@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => redirect()->route('encuesta.show'));
 
+// Mantiene la sesión activa mientras el usuario está en el formulario
+Route::get('/keepalive', fn() => response()->json(['ok' => true]))->name('keepalive');
+
 // Instrumento 1 – Encuesta Likert (Estudiantes)
 Route::get('/encuesta', [EncuestaController::class, 'show'])->name('encuesta.show');
 Route::post('/encuesta', [EncuestaController::class, 'store'])->name('encuesta.store');
