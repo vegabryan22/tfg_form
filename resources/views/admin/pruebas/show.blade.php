@@ -13,6 +13,7 @@
 
 <div class="detail-section">
   <h3>Identificación</h3>
+  <div class="detail-row"><span class="key">Código participante</span><span class="val" style="font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:var(--azul)">{{ $prueba->codigo_participante ?? '—' }}</span></div>
   <div class="detail-row"><span class="key">Fecha</span><span class="val">{{ $prueba->created_at->format('d/m/Y H:i') }}</span></div>
   <div class="detail-row"><span class="key">Institución</span><span class="val">{{ $prueba->institucion ?? '—' }}</span></div>
   <div class="detail-row"><span class="key">Nivel educativo</span><span class="val">{{ $prueba->nivel_educativo ?? '—' }}</span></div>

@@ -18,12 +18,13 @@
 <div class="section-card">
   <table class="data-table">
     <thead>
-      <tr><th>#</th><th>Fecha</th><th>Fase</th><th>Institución</th><th>Nivel</th><th>Puntaje</th><th></th></tr>
+      <tr><th>#</th><th>Código</th><th>Fecha</th><th>Fase</th><th>Institución</th><th>Nivel</th><th>Puntaje</th><th></th></tr>
     </thead>
     <tbody>
       @forelse($pruebas as $p)
       <tr>
         <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#999">{{ $p->id }}</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--azul)">{{ $p->codigo_participante ?? '—' }}</td>
         <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem">{{ $p->created_at->format('d/m/y H:i') }}</td>
         <td><span class="badge badge-{{ $p->fase }}">{{ $p->fase }}</span></td>
         <td style="font-size:0.82rem">{{ $p->institucion ?? '—' }}</td>

@@ -28,17 +28,30 @@
   <form action="{{ route('encuesta.store') }}" method="POST" novalidate>
     @csrf
 
-    {{-- FASE --}}
+    {{-- CÓDIGO + FASE --}}
     <div class="bloque">
-      <div class="bloque-titulo"><span class="num">FASE DE APLICACIÓN</span>Momento de la investigación</div>
-      <div class="campo">
-        <label>¿En qué fase de la investigación se aplica este instrumento? <span class="req">*</span></label>
-        <select name="fase" required>
+      <div class="bloque-titulo"><span class="num">IDENTIFICACIÓN</span>Código de participante y fase</div>
+      <div class="instrucciones" style="font-size:0.83rem;margin-bottom:20px">
+        <strong>Importante</strong>
+        Usa el <strong>mismo código</strong> que te asignó el investigador en todas las actividades de la investigación (encuesta, prueba, fase pre y fase post). Este código es anónimo y solo sirve para relacionar tus respuestas entre instrumentos.
+      </div>
+      <div class="grid-2">
+        <div class="campo">
+          <label>Tu código de participante <span class="req">*</span></label>
+          <input type="text" name="codigo_participante" value="{{ old('codigo_participante') }}"
+            placeholder="Ej. E-01, E-12..." required maxlength="20"
+            style="font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:0.05em">
+          @error('codigo_participante')<span class="error-msg">{{ $message }}</span>@enderror
+        </div>
+        <div class="campo">
+          <label>¿En qué fase de la investigación se aplica este instrumento? <span class="req">*</span></label>
+          <select name="fase" required>
           <option value="">Seleccione...</option>
           <option value="pre" {{ old('fase') == 'pre' ? 'selected' : '' }}>Pre-intervención (diagnóstico inicial)</option>
           <option value="post" {{ old('fase') == 'post' ? 'selected' : '' }}>Post-intervención (tras la intervención pedagógica)</option>
         </select>
         @error('fase')<span class="error-msg">{{ $message }}</span>@enderror
+        </div>
       </div>
     </div>
 

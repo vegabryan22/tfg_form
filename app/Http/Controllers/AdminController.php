@@ -86,7 +86,7 @@ class AdminController extends Controller
             // BOM para Excel
             fwrite($out, "\xEF\xBB\xBF");
             fputcsv($out, [
-                'ID','Fecha','Fase','Institución','Nivel','Género','Curso',
+                'ID','Código Participante','Fecha','Fase','Institución','Nivel','Género','Curso',
                 'Acceso Internet','Herramientas IA','Otra herramienta','Frecuencia IA',
                 'C1','C2','C3','C4','C5','C6',
                 'D1','D2','D3','D4','D5','D6','D7','D8',
@@ -95,7 +95,7 @@ class AdminController extends Controller
             ]);
             foreach ($encuestas as $e) {
                 fputcsv($out, [
-                    $e->id, $e->created_at->format('d/m/Y H:i'), $e->fase,
+                    $e->id, $e->codigo_participante, $e->created_at->format('d/m/Y H:i'), $e->fase,
                     $e->institucion, $e->nivel_educativo, $e->genero,
                     $e->curso_actual, $e->acceso_internet,
                     implode('; ', $e->herramientas_ia ?? []),
@@ -199,7 +199,7 @@ class AdminController extends Controller
             $out = fopen('php://output', 'w');
             fwrite($out, "\xEF\xBB\xBF");
             fputcsv($out, [
-                'ID','Fecha','Fase','Institución','Nivel',
+                'ID','Código Participante','Fecha','Fase','Institución','Nivel',
                 'A1','A2','A3',
                 'B1-E1','B1-E2','B1-E3','B2-Resultado','B2-Corrección',
                 'B3-Archivo','B3-NPE','B3-Acciones',
@@ -211,7 +211,7 @@ class AdminController extends Controller
             ]);
             foreach ($rows as $p) {
                 fputcsv($out, [
-                    $p->id, $p->created_at->format('d/m/Y H:i'),
+                    $p->id, $p->codigo_participante, $p->created_at->format('d/m/Y H:i'),
                     $p->fase, $p->institucion, $p->nivel_educativo,
                     $p->resp_a1, $p->resp_a2, $p->resp_a3,
                     $p->resp_b1_error1, $p->resp_b1_error2, $p->resp_b1_error3,

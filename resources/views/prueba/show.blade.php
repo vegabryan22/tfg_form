@@ -28,7 +28,18 @@
 
     <div class="bloque">
       <div class="bloque-titulo"><span class="num">IDENTIFICACIÓN</span>Datos del participante</div>
+      <div class="instrucciones" style="font-size:0.83rem;margin-bottom:20px">
+        <strong>Importante</strong>
+        Usa el <strong>mismo código</strong> que el investigador te asignó. Este código vincula esta prueba con tu encuesta para el análisis pre/post, manteniendo tu anonimato.
+      </div>
       <div class="grid-2">
+        <div class="campo" style="grid-column:span 2">
+          <label>Tu código de participante <span class="req">*</span></label>
+          <input type="text" name="codigo_participante" value="{{ old('codigo_participante') }}"
+            placeholder="Ej. E-01, E-12..." required maxlength="20"
+            style="font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:0.05em;max-width:240px">
+          @error('codigo_participante')<span class="error-msg">{{ $message }}</span>@enderror
+        </div>
         <div class="campo">
           <label>Fase <span class="req">*</span></label>
           <select name="fase" required>

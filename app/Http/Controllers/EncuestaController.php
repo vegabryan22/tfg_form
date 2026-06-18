@@ -15,8 +15,9 @@ class EncuestaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'fase'            => 'required|in:pre,post',
-            'institucion'     => 'required|string|max:200',
+            'codigo_participante' => 'required|string|max:20',
+            'fase'                => 'required|in:pre,post',
+            'institucion'         => 'required|string|max:200',
             'nivel_educativo' => 'required|string|max:100',
             'genero'          => 'required|string|max:50',
             'curso_actual'    => 'nullable|string|max:200',

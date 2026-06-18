@@ -9,6 +9,7 @@ class Prueba extends Model
     protected $table = 'pruebas';
 
     protected $fillable = [
+        'codigo_participante',
         'fase',
         'institucion',
         'nivel_educativo',

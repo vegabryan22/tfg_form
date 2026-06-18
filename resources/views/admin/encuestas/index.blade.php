@@ -19,7 +19,7 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th>#</th><th>Fecha</th><th>Fase</th><th>Institución</th>
+        <th>#</th><th>Código</th><th>Fecha</th><th>Fase</th><th>Institución</th>
         <th>Nivel</th><th>Género</th><th>Prom C</th><th>Prom D</th><th>Prom E</th><th></th>
       </tr>
     </thead>
@@ -27,6 +27,7 @@
       @forelse($encuestas as $e)
       <tr>
         <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#999">{{ $e->id }}</td>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--azul)">{{ $e->codigo_participante ?? '—' }}</td>
         <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem">{{ $e->created_at->format('d/m/y H:i') }}</td>
         <td><span class="badge badge-{{ $e->fase }}">{{ $e->fase }}</span></td>
         <td style="font-size:0.82rem">{{ $e->institucion }}</td>

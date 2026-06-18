@@ -15,8 +15,9 @@ class PruebaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'fase'            => 'required|in:pre,post',
-            'institucion'     => 'nullable|string|max:200',
+            'codigo_participante' => 'required|string|max:20',
+            'fase'                => 'required|in:pre,post',
+            'institucion'         => 'nullable|string|max:200',
             'nivel_educativo' => 'nullable|string|max:100',
             // Dimensión A
             'resp_a1' => 'nullable|string',
