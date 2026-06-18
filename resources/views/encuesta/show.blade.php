@@ -35,12 +35,12 @@
         <strong>Importante</strong>
         Usa el <b>mismo código</b> que te asignó el investigador en todas las actividades de la investigación (encuesta, prueba, fase pre y fase post). Este código es anónimo y solo sirve para relacionar tus respuestas entre instrumentos.
       </div>
-      <div class="grid-2">
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:20px;align-items:start">
         <div class="campo">
           <label>Tu código de participante <span class="req">*</span></label>
           <input type="text" name="codigo_participante" value="{{ old('codigo_participante') }}"
-            placeholder="Ej. E-01, E-12..." required maxlength="20"
-            style="font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:0.05em">
+            placeholder="Ej. E-01..." required maxlength="20"
+            style="font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:0.05em;width:100%">
           @error('codigo_participante')<span class="error-msg">{{ $message }}</span>@enderror
         </div>
         <div class="campo">
