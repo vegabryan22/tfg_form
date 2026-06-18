@@ -33,7 +33,7 @@
       <div class="bloque-titulo"><span class="num">IDENTIFICACIÓN</span>Código de participante y fase</div>
       <div class="instrucciones" style="font-size:0.83rem;margin-bottom:20px">
         <strong>Importante</strong>
-        Usa el <strong>mismo código</strong> que te asignó el investigador en todas las actividades de la investigación (encuesta, prueba, fase pre y fase post). Este código es anónimo y solo sirve para relacionar tus respuestas entre instrumentos.
+        Usa el <b>mismo código</b> que te asignó el investigador en todas las actividades de la investigación (encuesta, prueba, fase pre y fase post). Este código es anónimo y solo sirve para relacionar tus respuestas entre instrumentos.
       </div>
       <div class="grid-2">
         <div class="campo">

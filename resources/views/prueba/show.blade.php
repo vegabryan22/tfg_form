@@ -30,7 +30,7 @@
       <div class="bloque-titulo"><span class="num">IDENTIFICACIÓN</span>Datos del participante</div>
       <div class="instrucciones" style="font-size:0.83rem;margin-bottom:20px">
         <strong>Importante</strong>
-        Usa el <strong>mismo código</strong> que el investigador te asignó. Este código vincula esta prueba con tu encuesta para el análisis pre/post, manteniendo tu anonimato.
+        Usa el <b>mismo código</b> que el investigador te asignó. Este código vincula esta prueba con tu encuesta para el análisis pre/post, manteniendo tu anonimato.
       </div>
       <div class="grid-2">
         <div class="campo" style="grid-column:span 2">
